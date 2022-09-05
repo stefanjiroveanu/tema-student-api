@@ -5,13 +5,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.Data;
-import org.xmlbeam.annotation.XBRead;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
 public class ImportedStudent {
+
     private String firstname;
     private String lastname;
     private String cnp;

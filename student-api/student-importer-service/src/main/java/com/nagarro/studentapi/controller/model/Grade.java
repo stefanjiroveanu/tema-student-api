@@ -10,6 +10,7 @@ import java.time.LocalDate;
 
 @Data
 public class Grade {
+
     private String discipline;
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)

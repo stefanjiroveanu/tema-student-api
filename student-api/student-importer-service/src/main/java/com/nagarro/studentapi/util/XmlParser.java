@@ -3,6 +3,7 @@ package com.nagarro.studentapi.util;
 import com.nagarro.studentapi.controller.model.Address;
 import com.nagarro.studentapi.controller.model.Grade;
 import com.nagarro.studentapi.controller.model.ImportedStudent;
+import com.nagarro.studentapi.exception.AppException;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 
@@ -22,6 +23,8 @@ public class XmlParser {
     private static final String TEXT = "/text()";
     private static final String DISCIPLINE = "/@discipline";
     private static final String DATE = "/@date";
+    private static final String NODES_NUMBER = "count(/student/*)";
+    private static final int NUMBER_OF_STUDENT_ATTRIBUTES = 6;
 
 
     public ImportedStudent parse(String path) throws Exception {
@@ -31,6 +34,9 @@ public class XmlParser {
         Document document = documentBuilder.parse(path);
         document.getDocumentElement().normalize();
         XPath xpath = XPathFactory.newInstance().newXPath();
+        if(Integer.parseInt(xpath.compile(NODES_NUMBER).evaluate(document)) != NUMBER_OF_STUDENT_ATTRIBUTES){
+            throw new AppException("Invalid Xml due to number of elements");
+        }
         importedStudent.setFirstname(xpath.compile(createExpression("firstname", TEXT)).evaluate(document));
         importedStudent.setLastname(xpath.compile(createExpression("lastname", TEXT)).evaluate(document));
         importedStudent.setCnp(xpath.compile(createExpression("cnp", TEXT)).evaluate(document));
