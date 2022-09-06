@@ -2,7 +2,7 @@ package com.nagarro.studentapi.util;
 
 import com.nagarro.studentapi.controller.model.Address;
 import com.nagarro.studentapi.controller.model.Grade;
-import com.nagarro.studentapi.controller.model.ImportedStudent;
+import com.nagarro.studentapi.controller.model.Student;
 import com.nagarro.studentapi.exception.AppException;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,29 +28,54 @@ public class XmlParser {
     private static final int NUMBER_OF_STUDENT_ATTRIBUTES = 6;
 
 
-    public ImportedStudent parse(String path) throws Exception {
-        ImportedStudent importedStudent = new ImportedStudent();
+    public Student parsePath(byte[] studentAsByteArray) throws Exception {
+        Document document = computeDocument(studentAsByteArray);
+        return getStudent(document);
+    }
+
+    public Student parsePath(String path) {
+        try {
+            Document document = computeDocument(path);
+            return getStudent(document);
+        } catch (Exception e) {
+            throw new AppException(e.getMessage());
+        }
+    }
+
+    private static Document computeDocument(Object xmlDoc) throws Exception {
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse(path);
+        Document document;
+        if (xmlDoc instanceof byte[]) {
+            document = documentBuilder.parse(new ByteArrayInputStream((byte[]) xmlDoc));
+        } else if (xmlDoc instanceof String) {
+            document = documentBuilder.parse(xmlDoc.toString());
+        } else {
+            throw new AppException("The document type is not compatible");
+        }
         document.getDocumentElement().normalize();
+        return document;
+    }
+
+    private Student getStudent(Document document) throws XPathExpressionException {
         XPath xpath = XPathFactory.newInstance().newXPath();
-        if(Integer.parseInt(xpath.compile(NODES_NUMBER).evaluate(document)) != NUMBER_OF_STUDENT_ATTRIBUTES){
+        Student student = new Student();
+        if (Integer.parseInt(xpath.compile(NODES_NUMBER).evaluate(document)) != NUMBER_OF_STUDENT_ATTRIBUTES) {
             throw new AppException("Invalid Xml due to number of elements");
         }
-        importedStudent.setFirstname(xpath.compile(createExpression("firstname", TEXT)).evaluate(document));
-        importedStudent.setLastname(xpath.compile(createExpression("lastname", TEXT)).evaluate(document));
-        importedStudent.setCnp(xpath.compile(createExpression("cnp", TEXT)).evaluate(document));
-        importedStudent.setBirthDate(LocalDate.parse(xpath.compile(createExpression("birthDate", TEXT)).evaluate(document)));
+        student.setFirstname(xpath.compile(createExpression("firstname", TEXT)).evaluate(document));
+        student.setLastname(xpath.compile(createExpression("lastname", TEXT)).evaluate(document));
+        student.setCnp(xpath.compile(createExpression("cnp", TEXT)).evaluate(document));
+        student.setBirthDate(LocalDate.parse(xpath.compile(createExpression("birthDate", TEXT)).evaluate(document)));
         List<Grade> gradeList = getGrades(document, xpath);
-        importedStudent.setGrades(gradeList);
+        student.setGrades(gradeList);
         Address address = new Address();
         address.setCity(xpath.compile(createExpression("address/city", TEXT)).evaluate(document));
         address.setCountry(xpath.compile(createExpression("address/country", TEXT)).evaluate(document));
         address.setStreet(xpath.compile(createExpression("address/street", TEXT)).evaluate(document));
         address.setNumber(Integer.parseInt(xpath.compile(createExpression("address/number", TEXT)).evaluate(document)));
-        importedStudent.setAddress(address);
-        return importedStudent;
+        student.setAddress(address);
+        return student;
     }
 
     private List<Grade> getGrades(Document document, XPath xpath) throws XPathExpressionException {

@@ -1,10 +1,10 @@
 package com.nagarro.studentapi.service;
 
-import com.nagarro.studentapi.controller.model.ImportedStudent;
+import com.nagarro.studentapi.controller.model.Student;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface StudentImporterService {
 
-    ImportedStudent send(String path);
+    Student parse(byte[] studentAsByteArray);
 }

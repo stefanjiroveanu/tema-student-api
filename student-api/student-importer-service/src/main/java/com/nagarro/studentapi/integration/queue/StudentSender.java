@@ -1,6 +1,6 @@
-package com.nagarro.studentapi.integration;
+package com.nagarro.studentapi.integration.queue;
 
-import com.nagarro.studentapi.controller.model.ImportedStudent;
+import com.nagarro.studentapi.controller.model.Student;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -15,7 +15,7 @@ public class StudentSender {
     private static final String routingKey = "student_routingKey";
     private static final String exchange = "student_exchange";
 
-    public void send(ImportedStudent student) {
+    public void send(Student student) {
         template.convertAndSend(exchange, routingKey, student);
     }
 }

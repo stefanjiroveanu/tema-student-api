@@ -16,8 +16,8 @@ server:
 
 student-api:
   queue: "student_queue"
-  exchange : "student_exchange"
+  exchange: "student_exchange"
   routingKey: "student_routingKey"
-  xmlPath : "D:\\tema\\tema-student-api\\student-api\\student-importer-service\\src\\main\\static\\pending\\student.xml"
-  archivedDestination : "D:\\tema\\tema-student-api\\student-api\\student-importer-service\\src\\main\\static\\archived\\student.xml"
-  errorDestination : "D:\\tema\\tema-student-api\\student-api\\student-importer-service\\src\\main\\static\\error\\student.xml"
+  xmlPath: "D:\\tema\\tema-student-api\\student-api\\student-importer-service\\src\\main\\static\\pending"
+  archivedDestination: "D:\\tema\\tema-student-api\\student-api\\student-importer-service\\src\\main\\static\\archived"
+  errorDestination: "D:\\tema\\tema-student-api\\student-api\\student-importer-service\\src\\main\\static\\error"

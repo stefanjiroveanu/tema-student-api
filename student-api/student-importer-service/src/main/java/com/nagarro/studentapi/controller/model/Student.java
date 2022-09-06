@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class ImportedStudent {
+public class Student {
 
     private String firstname;
     private String lastname;

@@ -1,46 +1,25 @@
 package com.nagarro.studentapi.service;
 
-import com.nagarro.studentapi.controller.model.ImportedStudent;
-import com.nagarro.studentapi.integration.StudentSender;
+import com.nagarro.studentapi.controller.model.Student;
+import com.nagarro.studentapi.exception.AppException;
 import com.nagarro.studentapi.util.XmlParser;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 @Service
 public class StudentImporterServiceImpl implements StudentImporterService {
 
     private final XmlParser parser;
-    private final StudentSender studentSender;
 
-    @Value("${student-api.xmlPath}")
-    private String source;
-    @Value("${student-api.archivedDestination}")
-    private String archivedDestination;
-    @Value("${student-api.errorDestination}")
-    private String errorDestination;
-
-    public StudentImporterServiceImpl(XmlParser parser, StudentSender studentSender) {
+    public StudentImporterServiceImpl(XmlParser parser) {
         this.parser = parser;
-        this.studentSender = studentSender;
     }
 
-    public ImportedStudent send(String path) {
+    @Override
+    public Student parse(byte[] studentAsByteArray) {
         try {
-            ImportedStudent student = parser.parse(path);
-            studentSender.send(student);
-            Files.move(Paths.get(source), Paths.get(archivedDestination), REPLACE_EXISTING);
-            return student;
+            return parser.parsePath(studentAsByteArray);
         } catch (Exception e) {
-            File file = new File(source);
-            file.renameTo(new File(errorDestination));
-            file.delete();
-            throw new RuntimeException(e);
+            throw new AppException("Error while parsing XML file \n" + e.getMessage());
         }
     }
 }

@@ -15,7 +15,8 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-public class StudentImporterConfig {
+public class RabbitMQConfiguration {
+
     @Value("${student-api.queue}")
     private String queueName;
     @Value("${student-api.exchange}")

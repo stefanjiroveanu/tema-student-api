@@ -1,0 +1,28 @@
+<student>
+    <firstname>Johan</firstname>
+    <lastname>Dose</lastname>
+    <cnp>123</cnp>
+    <birthDate>2000</birthDate>
+    <birthDate>12</birthDate>
+    <birthDate>12</birthDate>
+    <address>
+        <street>a</street>
+        <number>1</number>
+        <city>Craiova</city>
+        <country>Romania</country>
+    </address>
+    <grades>
+        <discipline>a</discipline>
+        <date>2021</date>
+        <date>12</date>
+        <date>12</date>
+        <grade>10</grade>
+    </grades>
+    <grades>
+        <discipline>b</discipline>
+        <date>2021</date>
+        <date>12</date>
+        <date>12</date>
+        <grade>9</grade>
+    </grades>
+</student>
