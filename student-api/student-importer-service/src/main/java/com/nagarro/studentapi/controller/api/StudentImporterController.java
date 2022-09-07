@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/student")
+@RequestMapping("/api/students")
 public class StudentImporterController {
 
     private final StudentImporterFacade studentImporterFacade;
@@ -19,7 +19,7 @@ public class StudentImporterController {
         this.studentImporterFacade = studentImporterFacade;
     }
 
-    @PostMapping("/send")
+    @PostMapping
     public ResponseEntity<Student> sendStudent(@RequestBody byte[] student) {
         return new ResponseEntity<>(studentImporterFacade.sendStudent(student), HttpStatus.OK);
     }

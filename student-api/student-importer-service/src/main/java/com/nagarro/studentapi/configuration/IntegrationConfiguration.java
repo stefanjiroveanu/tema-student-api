@@ -1,12 +1,11 @@
 package com.nagarro.studentapi.configuration;
 
 import com.nagarro.studentapi.controller.model.Student;
-import com.nagarro.studentapi.integration.queue.StudentSender;
+import com.nagarro.studentapi.integration.queue.StudentQueueSender;
 import com.nagarro.studentapi.util.XmlParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.integration.annotation.InboundChannelAdapter;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.config.EnableIntegration;
@@ -31,7 +30,7 @@ public class IntegrationConfiguration {
     private static final String STUDENT_BUN_XML = "\\student_bun.xml";
     private static final String STUDENT_RAU_XML = "\\student_rau.xml";
     private static final String ERROR = "Error";
-    private final StudentSender studentSender;
+    private final StudentQueueSender studentQueueSender;
 
     @Value("${student-api.xmlPath}")
     private String inputPath;
@@ -40,8 +39,8 @@ public class IntegrationConfiguration {
     @Value("${student-api.errorDestination}")
     private String errorPath;
 
-    public IntegrationConfiguration(StudentSender studentSender) {
-        this.studentSender = studentSender;
+    public IntegrationConfiguration(StudentQueueSender studentQueueSender) {
+        this.studentQueueSender = studentQueueSender;
     }
 
     @Bean
@@ -50,7 +49,6 @@ public class IntegrationConfiguration {
     }
 
     @Bean
-    @InboundChannelAdapter(value = "messageChannel")
     public MessageSource<File> messageProducer() {
         FileReadingMessageSource messageSource = new FileReadingMessageSource();
         messageSource.setDirectory(new File(inputPath));
@@ -63,7 +61,7 @@ public class IntegrationConfiguration {
     public MessageHandler handler() {
         return message -> {
             if (message.getPayload() instanceof Student) {
-                studentSender.send((Student) message.getPayload());
+                studentQueueSender.send((Student) message.getPayload());
             }
         };
     }
@@ -73,7 +71,7 @@ public class IntegrationConfiguration {
         return IntegrationFlows.from(messageProducer())
                 .enrichHeaders(h -> h.headerExpression(FileHeaders.ORIGINAL_FILE, "payload"))
                 .convert(String.class)
-                .transform((String path) -> xmlParser.parsePath(path), e -> e.advice(errorAdvice()))
+                .transform((String path) -> xmlParser.parse(path), e -> e.advice(errorAdvice()))
                 .handle("handler", "handleMessage")
                 .get();
     }

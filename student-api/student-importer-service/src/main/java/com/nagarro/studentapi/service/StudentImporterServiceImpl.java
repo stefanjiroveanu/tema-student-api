@@ -17,7 +17,7 @@ public class StudentImporterServiceImpl implements StudentImporterService {
     @Override
     public Student parse(byte[] studentAsByteArray) {
         try {
-            return parser.parsePath(studentAsByteArray);
+            return parser.parse(studentAsByteArray);
         } catch (Exception e) {
             throw new AppException("Error while parsing XML file \n" + e.getMessage());
         }
