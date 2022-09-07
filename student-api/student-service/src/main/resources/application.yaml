@@ -1,0 +1,28 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    stream:
+      username: guest
+      password: guest
+  jpa:
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:postgresql://localhost:5432/studentdb?createDatabaseIfNotExist=true
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
+
+
+logging:
+  level:
+    org: ERROR
+
+server:
+  port: 8081
+
+student-api:
+  queue: "student_queue"
