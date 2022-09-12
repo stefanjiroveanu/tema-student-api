@@ -11,7 +11,7 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    url: jdbc:postgresql://localhost:5432/studentdb?stringtype=unspecified
+    url: jdbc:postgresql://localhost:5432/validationdb?stringtype=unspecified
     username: postgres
     password: root
     driver-class-name: org.postgresql.Driver
@@ -19,19 +19,19 @@ spring:
     baseline-on-migrate: true
     enabled: true
 
-
-
 logging:
   level:
     org: info
 
 server:
-  port: 8081
+  port: 8082
 
 student-api:
-  queue: "student_queue"
-  receivingValidationQueue: "replyingValidationQueue"
   validationQueue: "validationQueue"
-  validationRoutingKey: "validation_routing_key"
-  validationExchange: "validation_exchange"
+  replyQueue: "replyingValidationQueue"
+  routingKey: "replyingValidationRoutingKey"
+  exchange: "replyingValidationExchange"
+
+drools:
+  validationRule: "studentRules.drl"
 
