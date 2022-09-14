@@ -1,0 +1,15 @@
+<student>
+    <firstname th:text="${student.firstname}"></firstname>
+    <lastname th:text="${student.lastname}"></lastname>
+    <cnp th:text="${student.cnp}"></cnp>
+    <birthDate th:text="${student.birthDate}"></birthDate>
+    <address>
+        <street th:text="${student.address.street}"></street>
+        <number th:text="${student.address.number}"></number>
+        <city th:text="${student.address.city}"></city>
+        <country th:text="${student.address.country}"></country>
+    </address>
+    <grades>
+            <grade th:each = "grade : ${student.grades}" th:attr="discipline = ${grade.discipline}, date = ${grade.date}" th:text="${grade.grade}"></grade>
+    </grades>
+</student>

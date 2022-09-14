@@ -8,6 +8,7 @@
         <module>student-service</module>
         <module>student-validation-service</module>
         <module>student-search-service</module>
+        <module>student-export-service</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
