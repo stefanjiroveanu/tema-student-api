@@ -1,28 +1,26 @@
 package com.nagarro.studentapi.integration.queue;
 
-import com.nagarro.studentapi.integration.model.SolrStudent;
+import com.nagarro.studentapi.integration.model.SolrMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-
-@Component
 @RequiredArgsConstructor
-public class QueueSenderForValidation {
+@Component
+public class QueueSenderForSolr {
 
     private final RabbitTemplate rabbitTemplate;
 
-    @Value("${student-api.validationExchange}")
+    @Value("${student-api.solrExchange}")
     private String exchange;
 
-    @Value("${student-api.validationRoutingKey}")
+    @Value("${student-api.solrRoutingKey}")
     private String routingKey;
 
-    public void send(SolrStudent solrStudent) {
+    public void send(SolrMessage message) {
         rabbitTemplate.setExchange(exchange);
         rabbitTemplate.setRoutingKey(routingKey);
-        rabbitTemplate.convertAndSend(exchange, routingKey, solrStudent);
+        rabbitTemplate.convertAndSend(exchange, routingKey, message);
     }
-
 }

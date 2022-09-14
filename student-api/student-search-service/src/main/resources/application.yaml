@@ -1,0 +1,18 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    stream:
+      username: guest
+      password: guest
+
+logging:
+  level:
+    org: info
+
+server:
+  port: 8083
+
+student-api:
+  solrUrl : "http://localhost:8983/solr/student"
+  solrQueue: solrQueue
