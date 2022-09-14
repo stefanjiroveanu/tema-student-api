@@ -26,6 +26,7 @@ public class StudentSolrBean {
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
+
     @Field("firstname")
     public void setFirstname(String firstname) {
         this.firstname = firstname;

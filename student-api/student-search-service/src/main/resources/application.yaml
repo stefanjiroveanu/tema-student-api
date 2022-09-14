@@ -14,5 +14,5 @@ server:
   port: 8083
 
 student-api:
-  solrUrl : "http://localhost:8983/solr/student"
+  solrUrl: "http://localhost:8983/solr/student"
   solrQueue: solrQueue

@@ -1,4 +1,5 @@
 package com.nagarro.studentapi.service.model;
+
 import lombok.Data;
 
 @Data
