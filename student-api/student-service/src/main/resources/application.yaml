@@ -34,4 +34,7 @@ student-api:
   validationQueue: "validationQueue"
   validationRoutingKey: "validation_routing_key"
   validationExchange: "validation_exchange"
+  solrQueue: solrQueue
+  solrExchange: solrExchange
+  solrRoutingKey: solrRoutingKey
 

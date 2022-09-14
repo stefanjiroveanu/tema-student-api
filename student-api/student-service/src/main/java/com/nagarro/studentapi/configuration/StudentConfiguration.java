@@ -26,17 +26,23 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class StudentConfiguration {
 
+    @Value("${student-api.receivingValidationQueue}")
+    private String receivingValidationQueue;
     @Value("${student-api.queue}")
     private String importingQueue;
     @Value("${student-api.validationQueue}")
     private String validationQueue;
+    @Value("${student-api.solrQueue}")
+    private String solrQueue;
     @Value("${student-api.validationRoutingKey}")
     private String routingKey;
     @Value("${student-api.validationExchange}")
     private String exchange;
+    @Value("${student-api.solrRoutingKey}")
+    private String solrRoutingKey;
+    @Value("${student-api.solrExchange}")
+    private String solrExchange;
 
-    @Value("${student-api.receivingValidationQueue}")
-    private String receivingValidationQueue;
 
     @Bean
     public Queue validationQueue() {
@@ -49,9 +55,27 @@ public class StudentConfiguration {
     }
 
     @Bean
+    public Queue solrQueue() {
+        return new Queue(solrQueue);
+    }
+
+    @Bean
     public DirectExchange validationExchange() {
         return new DirectExchange(exchange);
     }
+
+    @Bean
+    public DirectExchange solrExchange() {
+        return new DirectExchange(solrExchange);
+    }
+
+    @Bean
+    public Binding solrBinding() {
+        return BindingBuilder.bind(solrQueue())
+                .to(solrExchange())
+                .with(solrRoutingKey);
+    }
+
 
     @Bean
     public Queue receivingValidationQueue() {
