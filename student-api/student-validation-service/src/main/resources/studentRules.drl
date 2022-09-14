@@ -1,0 +1,61 @@
+package com.nagarro.studentapi;
+import com.nagarro.studentapi.integration.model.Student;
+import com.nagarro.studentapi.integration.model.domain.Grade;
+import java.util.ArrayList
+import com.nagarro.studentapi.utils.ValidationUtils
+import java.util.List
+import com.nagarro.studentapi.exception.AppException;
+global com.nagarro.studentapi.integration.model.Student student;
+
+dialect  "mvel"
+
+function boolean isStudentValid(Student student) {
+   if(!ValidationUtils.hasAtLeastTwoGrades(student)) {
+        return false;
+   }
+   List<Double> grades = ValidationUtils.getAverageGrades(student);
+   for (java.lang.Double grade : grades) {
+       if(grade < 5)
+       {
+            return false;
+       }
+   }
+   return true;
+}
+
+function boolean isStudentNull(Student student) {
+    if (!(student.getFirstname() == null) &&
+        !(student.getCnp() == null) &&
+        !(student.getLastname() == null) &&
+        !student.getCnp().isEmpty() &&
+        !student.getLastname().isEmpty() &&
+        !student.getFirstname().isEmpty() &&
+        !(student.getAddress() == null) &&
+        !(student.getBirthDate() == null)) {
+        return false;
+    }
+    return true;
+}
+
+
+rule "student is valid"
+    when
+        $student : Student()
+        eval(isStudentValid($student)) and eval(!isStudentNull($student))
+    then
+    System.out.println(1);
+    $student.setValid(true);
+end
+
+rule "student is invalid"
+    when
+        $student : Student()
+        eval(!isStudentValid($student)) and eval(isStudentNull($student))
+    then
+    System.out.println(2);
+    $student.setValid(false);
+end
+
+
+
+

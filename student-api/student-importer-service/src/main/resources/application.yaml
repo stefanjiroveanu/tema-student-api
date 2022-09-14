@@ -1,0 +1,23 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    stream:
+      username: guest
+      password: guest
+
+
+logging:
+  level:
+    org: ERROR
+
+server:
+  port: 8080
+
+student-api:
+  queue: "student_queue"
+  exchange: "student_exchange"
+  routingKey: "student_routingKey"
+  xmlPath: "D:\\tema\\tema-student-api\\student-api\\student-importer-service\\src\\main\\static\\pending"
+  archivedDestination: "D:\\tema\\tema-student-api\\student-api\\student-importer-service\\src\\main\\static\\archived"
+  errorDestination: "D:\\tema\\tema-student-api\\student-api\\student-importer-service\\src\\main\\static\\error"

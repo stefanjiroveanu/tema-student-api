@@ -1,0 +1,37 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    stream:
+      username: guest
+      password: guest
+  jpa:
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:postgresql://localhost:5432/validationdb?stringtype=unspecified
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+
+logging:
+  level:
+    org: info
+
+server:
+  port: 8082
+
+student-api:
+  validationQueue: "validationQueue"
+  replyQueue: "replyingValidationQueue"
+  routingKey: "replyingValidationRoutingKey"
+  exchange: "replyingValidationExchange"
+
+drools:
+  validationRule: "studentRules.drl"
+

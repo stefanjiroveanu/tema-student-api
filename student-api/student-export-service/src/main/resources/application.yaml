@@ -1,0 +1,7 @@
+logging:
+  level:
+    org: info
+
+server:
+  port: 8084
+
